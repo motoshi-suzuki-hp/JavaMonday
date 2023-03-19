@@ -1,3 +1,4 @@
+package ScheduleManager;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -69,9 +70,9 @@ public class ScheduleManager {
 
     private static void addSchedule() {
         scanner.nextLine();
-        System.out.print("name: ");
+        System.out.print("Name: ");
         String name = scanner.nextLine();
-        System.out.print("date: ");
+        System.out.print("Date: ");
         String date = scanner.nextLine();
         System.out.println();
 
@@ -94,9 +95,9 @@ public class ScheduleManager {
             return;
         }
 
-        System.out.print("name(" + schedules.get(index).getName() + "):");
+        System.out.print("Name(" + schedules.get(index).getName() + "):");
         String name = scanner.nextLine();
-        System.out.print("date(" + schedules.get(index).getDate() + "):");
+        System.out.print("Date(" + schedules.get(index).getDate() + "):");
         String date = scanner.nextLine();
         System.out.println();
 
