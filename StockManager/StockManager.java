@@ -2,6 +2,8 @@ package StockManager;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.sound.midi.SysexMessage;
+
 class Stock {
     private String name;
     private int quantity;
@@ -191,7 +193,38 @@ public class StockManager {
 
 
                 case "O":
-                    deleteStock();
+                    while (secondChoice != 5) {
+                        System.out.println("resister order: 1");
+                        System.out.println("edit order: 2");
+                        System.out.println("delete order: 3");
+                        System.out.println("show order: 4");
+                        System.out.println("top menu: 5");
+                        System.out.print("number: ");
+                        secondChoice = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.println();
+
+                        switch (secondChoice) {
+                            case 1:
+                                increaseQuantity();
+                                break;
+                            case 2:
+                                decreaseQuantity();
+                                break;
+                            case 3:
+                                adjustQuantity();
+                                break;
+                            case 4:
+                                showOrder();
+                                break;
+                            case 5:
+                                System.out.println("top menu.");
+                                System.out.println();
+                                break;
+                            default:
+                                System.out.println("Invalid input.");
+                        }
+                    }
                     break;
                 case "S":
                     showStock();
@@ -390,8 +423,7 @@ public class StockManager {
             return;
         }
 
-        System.out.print("Name: ");
-        String name = stocks.get(index).getName();
+        System.out.print("Name: " + stocks.get(index).getName());
         System.out.print("orderNum: ");
         int orderNum = scanner.nextInt();
         scanner.nextLine();
@@ -401,61 +433,82 @@ public class StockManager {
         String orderDate = scanner.nextLine();
         scanner.nextLine();
 
-        Order order = new Order(name, orderNum, orderSup, orderDate);
+        Order order = new Order(stocks.get(index).getName(), orderNum, orderSup, orderDate);
         orders.add(order);
 
-
-        System.out.println("Stock was added.");
-        System.out.println();
-
-        
-
-
-    }
-
-    private static void resisterSupplier() {
-        showStock();
-        
-        if (stocks.isEmpty()) {
-            return;
-        }
-
-        System.out.print("Index number: ");
-        int index = scanner.nextInt();
-        System.out.println();
-
-        System.out.print("Resister Supplier(" + stocks.get(index).getSupplier() + "): ");
-        String sup = scanner.nextLine();
-        System.out.println();
-
-        stocks.get(index).setSupplier(sup);
-
-        System.out.println("Supplier was resistered.");
+        System.out.println("Order was resistered.");
         System.out.println();
 
     }
 
-    private static void resisterDate() {
+    private static void editOrder() {
+        System.out.print("Index number: ");
+        int index = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println();
 
-        showStock();
-        
-        if (stocks.isEmpty()) {
+        if (index > stocks.size() || index < -1) {
+            System.out.println("Invalid index number.");
             return;
         }
 
+        System.out.print("Name: " + orders.get(index).getName());
+        System.out.print("orderNum(" + orders.get(index).getOrderNum() + "):");
+        int orderNum = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("orderSup(" + orders.get(index).getOrderSup() + "):");
+        String orderSup = scanner.nextLine();
+        System.out.print("orderDate(" + orders.get(index).getOrderDate() + "):");
+        String orderDate = scanner.nextLine();
+        scanner.nextLine();
+        System.out.println();
+
+
+        if (orderNum >= 0) {
+            orders.get(index).setOrderNum(orderNum);
+        }
+
+        if (!orderSup.equals("")) {
+            orders.get(index).setOrderSup(orderSup);
+        }
+
+        if (!orderDate.equals("")) {
+            orders.get(index).setOrderDate(orderDate);
+        }
+
+        System.out.println("Order was edited.");
+        System.out.println();
+
+    }
+
+    private static void deleteOrder() {
+
         System.out.print("Index number: ");
         int index = scanner.nextInt();
+        scanner.nextLine();
         System.out.println();
 
-        System.out.print("Resister Supplier(" + stocks.get(index).getSupplier() + "): ");
-        String sup = scanner.nextLine();
+        if (index > stocks.size() || index < -1) {
+            System.out.println("Invalid index number.");
+            return;
+        }
+
+        orders.remove(index);
+        System.out.println("Order was deleted.");
         System.out.println();
+    }
 
-        stocks.get(index).setSupplier(sup);
+    private static void showOrder() {
+        if (orders.isEmpty()) {
+            System.out.println("You have no orders.");
+            System.out.println();
+            return;
+        }
 
-        System.out.println("Supplier was resistered.");
+        for(int i = 0; i < orders.size(); i++) {
+            System.out.println(i + ". " + orders.get(i).getName() + " x" + orders.get(i).getOrderNum() + " @" + orders.get(i).getOrderSup() + " (" + orders.get(i).getOrderDate() + ")");
+        }
         System.out.println();
-
     }
 
     // Sales Managemant System
