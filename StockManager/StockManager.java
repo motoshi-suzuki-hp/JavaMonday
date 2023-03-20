@@ -49,9 +49,59 @@ class Stock {
 
 }
 
+
+class Order {
+    private String name;
+    private int orderNum;
+    private String orderSup;
+    private String orderDate;
+
+    public Order(String name, int orderNum, String orderSup, String orderDate) {
+        this.name = name;
+        this.orderNum = orderNum;
+        this.orderSup = orderSup;
+        this.orderDate = orderDate;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setOrderNum(int orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public void setOrderSup(String orderSup) {
+        this.orderSup = orderSup;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public int getOrderNum() {
+        return this.orderNum;
+    }
+
+    public String getOrderSup() {
+        return this.orderSup;
+    }
+
+    public String getOrderDate() {
+        return this.orderDate;
+    }
+
+
+}
+
 public class StockManager {
     private static Scanner scanner = new Scanner(System.in);
     private static ArrayList<Stock> stocks = new ArrayList<Stock>();
+    private static ArrayList<Order> orders = new ArrayList<Order>();
     public static void main(String args[]) {
         while (true) {
             System.out.println("Master: M");
@@ -64,10 +114,13 @@ public class StockManager {
             String firstChoice = scanner.next();
             System.out.println();
 
+            int secondChoice = 0;
+
             switch (firstChoice) {
+
+
                 case "M":
                     // Stock Master Managemant System
-                    int secondChoice = 0;
                     while (secondChoice != 5) {
                         System.out.println("resister: 1");
                         System.out.println("edit: 2");
@@ -104,8 +157,39 @@ public class StockManager {
                     
 
                 case "Q":
-                    editStock();
+                    while (secondChoice != 5) {
+                        System.out.println("in: 1");
+                        System.out.println("out: 2");
+                        System.out.println("adjust: 3");
+                        // 
+                        System.out.println("top menu: 5");
+                        System.out.print("number: ");
+                        secondChoice = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.println();
+
+                        switch (secondChoice) {
+                            case 1:
+                                increaseQuantity();
+                                break;
+                            case 2:
+                                decreaseQuantity();
+                                break;
+                            case 3:
+                                adjustQuantity();
+                                break;
+
+                            case 5:
+                                System.out.println("top menu.");
+                                System.out.println();
+                                break;
+                            default:
+                                System.out.println("Invalid input.");
+                        }
+                    }
                     break;
+
+
                 case "O":
                     deleteStock();
                     break;
@@ -222,8 +306,157 @@ public class StockManager {
 
 
     // Stock Quantity Managemant System
+    private static void increaseQuantity() {
+        showStock();
+
+        if (stocks.isEmpty()) {
+            return;
+        }
+
+        System.out.print("Index number: ");
+        int index = scanner.nextInt();
+        System.out.println();
+
+        System.out.print("Increase quantity(" + stocks.get(index).getQuantity() + "): +");
+        int inc = scanner.nextInt();
+        System.out.println();
+
+        stocks.get(index).setQuantity(stocks.get(index).getQuantity() + inc);
+
+
+        System.out.println("Stock was increased.");
+        System.out.println();
+    }
+
+    private static void decreaseQuantity() {
+        showStock();
+        
+        if (stocks.isEmpty()) {
+            return;
+        }
+
+        System.out.print("Index number: ");
+        int index = scanner.nextInt();
+        System.out.println();
+
+        System.out.print("Decrease quantity(" + stocks.get(index).getQuantity() + "): -");
+        int dec = scanner.nextInt();
+        System.out.println();
+
+        stocks.get(index).setQuantity(stocks.get(index).getQuantity() - dec);
+
+
+        System.out.println("Stock was decreased.");
+        System.out.println();
+    }
+    
+    private static void adjustQuantity() {
+        showStock();
+        
+        if (stocks.isEmpty()) {
+            return;
+        }
+
+        System.out.print("Index number: ");
+        int index = scanner.nextInt();
+        System.out.println();
+
+
+        System.out.print("Adjust quantity(" + stocks.get(index).getQuantity() + "): ");
+        int adj = scanner.nextInt();
+        System.out.println();
+
+        stocks.get(index).setQuantity(adj);
+
+
+        System.out.println("Stock was adjusted.");
+        System.out.println();
+    }
 
     // Order Managemant System
+    private static void resisterOrder() {
+        showStock();
+        
+        if (stocks.isEmpty()) {
+            return;
+        }
+
+        System.out.print("Index number: ");
+        int index = scanner.nextInt();
+        System.out.println();
+
+        if (stocks.get(index).getQuantity() != 0) {
+            System.out.println("You have " + stocks.get(index).getQuantity() + " stocks.");
+            return;
+        }
+
+        System.out.print("Name: ");
+        String name = stocks.get(index).getName();
+        System.out.print("orderNum: ");
+        int orderNum = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("orderSup: ");
+        String orderSup = scanner.nextLine();
+        System.out.print("orderDate: ");
+        String orderDate = scanner.nextLine();
+        scanner.nextLine();
+
+        Order order = new Order(name, orderNum, orderSup, orderDate);
+        orders.add(order);
+
+
+        System.out.println("Stock was added.");
+        System.out.println();
+
+        
+
+
+    }
+
+    private static void resisterSupplier() {
+        showStock();
+        
+        if (stocks.isEmpty()) {
+            return;
+        }
+
+        System.out.print("Index number: ");
+        int index = scanner.nextInt();
+        System.out.println();
+
+        System.out.print("Resister Supplier(" + stocks.get(index).getSupplier() + "): ");
+        String sup = scanner.nextLine();
+        System.out.println();
+
+        stocks.get(index).setSupplier(sup);
+
+        System.out.println("Supplier was resistered.");
+        System.out.println();
+
+    }
+
+    private static void resisterDate() {
+
+        showStock();
+        
+        if (stocks.isEmpty()) {
+            return;
+        }
+
+        System.out.print("Index number: ");
+        int index = scanner.nextInt();
+        System.out.println();
+
+        System.out.print("Resister Supplier(" + stocks.get(index).getSupplier() + "): ");
+        String sup = scanner.nextLine();
+        System.out.println();
+
+        stocks.get(index).setSupplier(sup);
+
+        System.out.println("Supplier was resistered.");
+        System.out.println();
+
+    }
 
     // Sales Managemant System
 
@@ -232,3 +465,9 @@ public class StockManager {
 
 
 }
+
+// 発注管理機能：在庫が不足している場合に発注を行うことができます。発注数、仕入先、注文日などを登録することができます。
+
+// 売上管理機能：売上の管理を行うことができます。販売数、売上金額、商品名などを登録することができます。
+
+// 帳票出力機能：各種帳票を出力することができます。在庫数一覧、売上一覧、発注一覧などがあります。
