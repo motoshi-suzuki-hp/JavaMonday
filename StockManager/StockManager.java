@@ -1,4 +1,5 @@
 package StockManager;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -641,11 +642,6 @@ public class StockManager {
 
         System.out.println("Sales was resistered.");
         System.out.println();
-
-
-
-
-
     }
 
     private static void editSales() {
@@ -659,7 +655,26 @@ public class StockManager {
             return;
         }
 
+        System.out.print("Name: " + saleses.get(index).getName());
+        System.out.print("salesNum(" + saleses.get(index).getSalesNum() + "):");
+        int salesNum = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("salesVal(" + saleses.get(index).getSalesVal() + "):");
+        double salesVal = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.println();
 
+
+        if (salesNum >= 0) {
+            saleses.get(index).setSalesNum(salesNum);
+        }
+
+        if (salesVal >= 0) {
+            saleses.get(index).setSalesVal(salesVal);
+        }
+
+        System.out.println("Sales was edited.");
+        System.out.println();
     }
 
     private static void deleteSales() {
@@ -673,7 +688,9 @@ public class StockManager {
             return;
         }
 
-
+        saleses.remove(index);
+        System.out.println("Sales was deleted.");
+        System.out.println();
     }
 
     private static void showSales() {
@@ -692,7 +709,6 @@ public class StockManager {
     // Ledger Managemant System
 
 
-        
     
 
 }
