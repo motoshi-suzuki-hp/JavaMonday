@@ -2,7 +2,7 @@ package StockManager;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.sound.midi.SysexMessage;
+// import javax.sound.midi.SysexMessage;
 
 class Stock {
     private String name;
@@ -100,10 +100,48 @@ class Order {
 
 }
 
+class Sales {
+    private String name;
+    private int salesNum;
+    private double salesVal;
+
+    public Sales(String name, int salesNum, double salesVal) {
+        this.name = name;
+        this.salesNum = salesNum;
+        this.salesVal = salesVal;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public int getSalesNum(){
+        return this.salesNum;
+    }
+
+    public void setSalesNum(int salesNum){
+        this.salesNum = salesNum;
+    }
+
+    public double getSalesVal(){
+        return this.salesVal;
+    }
+
+    public void setSalesVal(double salesVal){
+        this.salesVal = salesVal;
+    }
+
+}
+
 public class StockManager {
     private static Scanner scanner = new Scanner(System.in);
     private static ArrayList<Stock> stocks = new ArrayList<Stock>();
     private static ArrayList<Order> orders = new ArrayList<Order>();
+    private static ArrayList<Sales> saleses = new ArrayList<Sales>();
     public static void main(String args[]) {
         while (true) {
             System.out.println("Master: M");
@@ -124,10 +162,10 @@ public class StockManager {
                 case "M":
                     // Stock Master Managemant System
                     while (secondChoice != 5) {
-                        System.out.println("resister: 1");
-                        System.out.println("edit: 2");
-                        System.out.println("delete: 3");
-                        System.out.println("show: 4");
+                        System.out.println("resister stock: 1");
+                        System.out.println("edit stock: 2");
+                        System.out.println("delete stock: 3");
+                        System.out.println("show stock: 4");
                         System.out.println("top menu: 5");
                         System.out.print("number: ");
                         secondChoice = scanner.nextInt();
@@ -163,7 +201,7 @@ public class StockManager {
                         System.out.println("in: 1");
                         System.out.println("out: 2");
                         System.out.println("adjust: 3");
-                        // 
+                        System.out.println("show: 4");
                         System.out.println("top menu: 5");
                         System.out.print("number: ");
                         secondChoice = scanner.nextInt();
@@ -206,13 +244,13 @@ public class StockManager {
 
                         switch (secondChoice) {
                             case 1:
-                                increaseQuantity();
+                                resisterOrder();
                                 break;
                             case 2:
-                                decreaseQuantity();
+                                editOrder();
                                 break;
                             case 3:
-                                adjustQuantity();
+                                deleteOrder();
                                 break;
                             case 4:
                                 showOrder();
@@ -226,11 +264,77 @@ public class StockManager {
                         }
                     }
                     break;
+
                 case "S":
-                    showStock();
+                    while (secondChoice != 5) {
+                        System.out.println("resister sales: 1");
+                        System.out.println("edit sales: 2");
+                        System.out.println("delete sales: 3");
+                        System.out.println("show sales: 4");
+                        System.out.println("top menu: 5");
+                        System.out.print("number: ");
+                        secondChoice = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.println();
+
+                        switch (secondChoice) {
+                            case 1:
+                                resisterSales();
+                                break;
+                            case 2:
+                                editSales();
+                                break;
+                            case 3:
+                                deleteSales();
+                                break;
+                            case 4:
+                                showSales();
+                                break;
+                            case 5:
+                                System.out.println("top menu.");
+                                System.out.println();
+                                break;
+                            default:
+                                System.out.println("Invalid input.");
+                        }
+                    }
                     break;
+
                 case "L":
+                    while (secondChoice != 5) {
+                        System.out.println("show: 1");
+                        System.out.println("show quan: 2");
+                        System.out.println("show order: 3");
+                        System.out.println("show sales: 4");
+                        System.out.println("top menu: 5");
+                        System.out.print("number: ");
+                        secondChoice = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.println();
+
+                        switch (secondChoice) {
+                            case 1:
+                                showStock();
+                                break;
+                            case 2:
+                                // decreaseQuantity();
+                                break;
+                            case 3:
+                                showOrder();
+                                break;
+                            case 4:
+                                showSales();
+                                break;
+                            case 5:
+                                System.out.println("top menu.");
+                                System.out.println();
+                                break;
+                            default:
+                                System.out.println("Invalid input.");
+                        }
+                    }
                     break;
+
                 case "T":
                     System.out.println("System was terminated.");
                     System.out.println();
@@ -447,7 +551,7 @@ public class StockManager {
         scanner.nextLine();
         System.out.println();
 
-        if (index > stocks.size() || index < -1) {
+        if (index > orders.size() || index < -1) {
             System.out.println("Invalid index number.");
             return;
         }
@@ -488,7 +592,7 @@ public class StockManager {
         scanner.nextLine();
         System.out.println();
 
-        if (index > stocks.size() || index < -1) {
+        if (index > orders.size() || index < -1) {
             System.out.println("Invalid index number.");
             return;
         }
@@ -513,11 +617,89 @@ public class StockManager {
 
     // Sales Managemant System
 
+    private static void resisterSales() {
+        showStock();
+        
+        if (stocks.isEmpty()) {
+            return;
+        }
+
+        System.out.print("Index number: ");
+        int index = scanner.nextInt();
+        System.out.println();
+
+        System.out.print("Name: " + stocks.get(index).getName());
+        System.out.print("salesNum: ");
+        int salesNum = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("salesVal: ");
+        double salesVal = scanner.nextDouble();
+        scanner.nextLine();
+
+        Sales sales = new Sales(stocks.get(index).getName(), salesNum, salesVal);
+        saleses.add(sales);
+
+        System.out.println("Sales was resistered.");
+        System.out.println();
+
+
+
+
+
+    }
+
+    private static void editSales() {
+        System.out.print("Index number: ");
+        int index = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println();
+
+        if (index > saleses.size() || index < -1) {
+            System.out.println("Invalid index number.");
+            return;
+        }
+
+
+    }
+
+    private static void deleteSales() {
+        System.out.print("Index number: ");
+        int index = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println();
+
+        if (index > saleses.size() || index < -1) {
+            System.out.println("Invalid index number.");
+            return;
+        }
+
+
+    }
+
+    private static void showSales() {
+        if (saleses.isEmpty()) {
+            System.out.println("You have no sales.");
+            System.out.println();
+            return;
+        }
+
+        for(int i = 0; i < saleses.size(); i++) {
+            System.out.println(i + ". " + saleses.get(i).getName() + " x" + saleses.get(i).getSalesNum() + " $" + saleses.get(i).getSalesVal());
+        }
+        System.out.println();
+    }
+
     // Ledger Managemant System
 
 
+        
+    
 
 }
+
+// 商品マスター管理機能：商品の情報を登録・更新・削除することができます。商品名、在庫数、仕入先、価格などを登録することができます。
+
+// 在庫数管理機能：在庫の入出庫を管理することができます。商品の入庫、出庫、在庫数の調整を行うことができます。
 
 // 発注管理機能：在庫が不足している場合に発注を行うことができます。発注数、仕入先、注文日などを登録することができます。
 
