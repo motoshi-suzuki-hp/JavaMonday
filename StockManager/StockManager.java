@@ -7,13 +7,13 @@ import java.util.Scanner;
 
 class Stock {
     private String name;
-    private int quantity;
+    private int num;
     private String supplier;
     private double value;
 
-    public Stock(String name, int quantity, String supplier, double value) {
+    public Stock(String name, int num, String supplier, double value) {
         this.name = name;
-        this.quantity = quantity;
+        this.num = num;
         this.supplier = supplier;
         this.value = value;
     }
@@ -26,12 +26,12 @@ class Stock {
         this.name = name;
     }
 
-    public int getQuantity(){
-        return this.quantity;
+    public int getNum(){
+        return this.num;
     }
 
-    public void setQuantity(int quantity){
-        this.quantity = quantity;
+    public void setNum(int num){
+        this.num = num;
     }
 
     public String getSupplier(){
@@ -52,6 +52,43 @@ class Stock {
 
 }
 
+class Quantity {
+    private String name;
+    private int inc;
+    private int dec;
+
+    public Quantity(String name, int inc, int dec) {
+        this.name = name;
+        this.inc = inc;
+        this.dec = dec;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setInc(int inc) {
+        this.inc = inc;
+    }
+
+    public int getInc() {
+        return this.inc;
+    }
+
+
+    public void setDec(int dec) {
+        this.dec = dec;
+    }
+
+    public int getDec() {
+        return this.dec;
+    }
+
+}
 
 class Order {
     private String name;
@@ -141,6 +178,7 @@ class Sales {
 public class StockManager {
     private static Scanner scanner = new Scanner(System.in);
     private static ArrayList<Stock> stocks = new ArrayList<Stock>();
+    private static ArrayList<Quantity> quantities = new ArrayList<Quantity>();
     private static ArrayList<Order> orders = new ArrayList<Order>();
     private static ArrayList<Sales> saleses = new ArrayList<Sales>();
     public static void main(String args[]) {
@@ -217,9 +255,11 @@ public class StockManager {
                                 decreaseQuantity();
                                 break;
                             case 3:
-                                adjustQuantity();
+                                editQuantity();
                                 break;
-
+                            case 4:
+                                showQuantity();
+                                break;
                             case 5:
                                 System.out.println("top menu.");
                                 System.out.println();
@@ -318,7 +358,7 @@ public class StockManager {
                                 showStock();
                                 break;
                             case 2:
-                                // decreaseQuantity();
+                                showQuantity();
                                 break;
                             case 3:
                                 showOrder();
@@ -354,8 +394,8 @@ public class StockManager {
     private static void resisterStock(){
         System.out.print("Name: ");
         String name = scanner.nextLine();
-        System.out.print("Quantity: ");
-        int quantity = scanner.nextInt();
+        System.out.print("Num: ");
+        int num = scanner.nextInt();
         scanner.nextLine();
         System.out.print("Supplier: ");
         String supplier = scanner.nextLine();
@@ -363,9 +403,13 @@ public class StockManager {
         double value = scanner.nextDouble();
         scanner.nextLine();
 
-        Stock stock = new Stock(name, quantity, supplier, value);
+
+
+        Stock stock = new Stock(name, num, supplier, value);
         stocks.add(stock);
 
+        Quantity quantity = new Quantity(name, 0, 0);
+        quantities.add(quantity);
 
         System.out.println("Stock was added.");
         System.out.println();
@@ -384,7 +428,7 @@ public class StockManager {
 
         System.out.print("Name(" + stocks.get(index).getName() + "):");
         String name = scanner.nextLine();
-        System.out.print("Quantity(" + stocks.get(index).getQuantity() + "):");
+        System.out.print("Quantity(" + stocks.get(index).getNum() + "):");
         int quantity = scanner.nextInt();
         scanner.nextLine();
         System.out.print("Supplier(" + stocks.get(index).getSupplier() + "):");
@@ -399,7 +443,7 @@ public class StockManager {
         }
 
         if (quantity >= 0) {
-            stocks.get(index).setQuantity(quantity);
+            stocks.get(index).setNum(quantity);
         }
 
         if (!supplier.equals("")) {
@@ -437,7 +481,7 @@ public class StockManager {
         }
 
         for(int i = 0; i < stocks.size(); i++) {
-            System.out.println(i + ". " + stocks.get(i).getName() + " x" + stocks.get(i).getQuantity() + " @" + stocks.get(i).getSupplier() + " $" + stocks.get(i).getValue());
+            System.out.println(i + ". " + stocks.get(i).getName() + " x" + stocks.get(i).getNum() + " @" + stocks.get(i).getSupplier() + " $" + stocks.get(i).getValue());
         }
         System.out.println();
     }
@@ -455,12 +499,12 @@ public class StockManager {
         int index = scanner.nextInt();
         System.out.println();
 
-        System.out.print("Increase quantity(" + stocks.get(index).getQuantity() + "): +");
+        System.out.print("Increase quantity(" + stocks.get(index).getNum() + "): +");
         int inc = scanner.nextInt();
         System.out.println();
 
-        stocks.get(index).setQuantity(stocks.get(index).getQuantity() + inc);
-
+        stocks.get(index).setNum(stocks.get(index).getNum() + inc);
+        quantities.get(index).setInc(inc);
 
         System.out.println("Stock was increased.");
         System.out.println();
@@ -477,18 +521,18 @@ public class StockManager {
         int index = scanner.nextInt();
         System.out.println();
 
-        System.out.print("Decrease quantity(" + stocks.get(index).getQuantity() + "): -");
+        System.out.print("Decrease quantity(" + stocks.get(index).getNum() + "): -");
         int dec = scanner.nextInt();
         System.out.println();
 
-        stocks.get(index).setQuantity(stocks.get(index).getQuantity() - dec);
-
+        stocks.get(index).setNum(stocks.get(index).getNum() - dec);
+        quantities.get(index).setDec(-1*dec);
 
         System.out.println("Stock was decreased.");
         System.out.println();
     }
     
-    private static void adjustQuantity() {
+    private static void editQuantity() {
         showStock();
         
         if (stocks.isEmpty()) {
@@ -500,14 +544,27 @@ public class StockManager {
         System.out.println();
 
 
-        System.out.print("Adjust quantity(" + stocks.get(index).getQuantity() + "): ");
-        int adj = scanner.nextInt();
+        System.out.print("Adjust quantity(" + stocks.get(index).getNum() + "): ");
+        int edit = scanner.nextInt();
         System.out.println();
 
-        stocks.get(index).setQuantity(adj);
+        stocks.get(index).setNum(edit);
 
 
-        System.out.println("Stock was adjusted.");
+        System.out.println("Stock was edited.");
+        System.out.println();
+    }
+
+    private static void showQuantity() {
+        if (quantities.isEmpty()) {
+            System.out.println("You have no quantities.");
+            System.out.println();
+            return;
+        }
+
+        for(int i = 0; i < quantities.size(); i++) {
+            System.out.println(i + ". " + quantities.get(i).getName() + " +" + quantities.get(i).getInc() + " -" + quantities.get(i).getDec());
+        }
         System.out.println();
     }
 
@@ -523,8 +580,8 @@ public class StockManager {
         int index = scanner.nextInt();
         System.out.println();
 
-        if (stocks.get(index).getQuantity() != 0) {
-            System.out.println("You have " + stocks.get(index).getQuantity() + " stocks.");
+        if (stocks.get(index).getNum() != 0) {
+            System.out.println("You have " + stocks.get(index).getNum() + " stocks.");
             return;
         }
 
@@ -557,7 +614,7 @@ public class StockManager {
             return;
         }
 
-        System.out.print("Name: " + orders.get(index).getName());
+        System.out.println("Name: " + orders.get(index).getName());
         System.out.print("orderNum(" + orders.get(index).getOrderNum() + "):");
         int orderNum = scanner.nextInt();
         scanner.nextLine();
@@ -565,7 +622,6 @@ public class StockManager {
         String orderSup = scanner.nextLine();
         System.out.print("orderDate(" + orders.get(index).getOrderDate() + "):");
         String orderDate = scanner.nextLine();
-        scanner.nextLine();
         System.out.println();
 
 
@@ -615,6 +671,7 @@ public class StockManager {
         }
         System.out.println();
     }
+
 
     // Sales Managemant System
 
