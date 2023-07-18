@@ -188,8 +188,8 @@ public class StockManager {
             System.out.println("Order: O");
             System.out.println("Sales: S");
             System.out.println("Ledger: L");
-            System.out.println("terminate: T");
-            System.out.print("Character: ");
+            System.out.println("Terminate: T");
+            System.out.print("Your choice: ");
             String firstChoice = scanner.next();
             System.out.println();
 
